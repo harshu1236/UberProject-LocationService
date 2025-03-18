@@ -7,7 +7,6 @@ import org.springframework.data.redis.core.GeoOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.Position;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,8 +25,8 @@ public class RedisLocationServiceImpl implements LocationService {
 
     @Override
     public Boolean saveDriverLocation(String driverId, Double latitude, Double longitude) {
-        GeoOperations<String,String> geoOperations = stringRedisTemplate.opsForGeo();
-        geoOperations.add(DRIVER_GEO_POS_KEY,
+        GeoOperations<String,String> geoOperations = stringRedisTemplate.opsForGeo();  // Get GeoOperations instance
+        geoOperations.add(DRIVER_GEO_POS_KEY,                      // Add location data to Redis under the given key
                 new RedisGeoCommands.GeoLocation<>(driverId,
                         new Point(latitude, longitude)));
         return true;
@@ -38,16 +37,16 @@ public class RedisLocationServiceImpl implements LocationService {
 
         GeoOperations<String,String> geoOperations = stringRedisTemplate.opsForGeo();
 
-        Distance distanceRadius = new Distance(SEARCH_RADIUS, Metrics.KILOMETERS);
-        Circle circleWithin = new Circle(new Point(latitude, longitude), distanceRadius);
+        Distance distanceRadius = new Distance(SEARCH_RADIUS, Metrics.KILOMETERS);         // Define search radius
+        Circle circleWithin = new Circle(new Point(latitude, longitude), distanceRadius);  // Create a circular area for search
 
-        GeoResults<RedisGeoCommands.GeoLocation<String>> results = geoOperations.radius(DRIVER_GEO_POS_KEY, circleWithin);
+        GeoResults<RedisGeoCommands.GeoLocation<String>> results = geoOperations.radius(DRIVER_GEO_POS_KEY, circleWithin); // Search for nearby drivers
 
         List<DriverLocationDto> drivers = new ArrayList<>();
 
         for(GeoResult<RedisGeoCommands.GeoLocation<String>> geoResult : results) {
 
-            Point point = geoOperations.position(DRIVER_GEO_POS_KEY,geoResult.getContent().getName()).get(0);
+            Point point = geoOperations.position(DRIVER_GEO_POS_KEY,geoResult.getContent().getName()).get(0);  // Retrieve exact position of driver
             DriverLocationDto driverLocationDto = DriverLocationDto.builder()
                     .driverId(geoResult.getContent().getName())
                     .latitude(point.getX())

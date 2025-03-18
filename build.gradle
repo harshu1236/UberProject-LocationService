@@ -25,18 +25,43 @@ repositories {
 }
 
 dependencies {
+    // Spring Boot starter for integrating Redis with Spring Data
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // Spring Boot starter for building web applications (includes Tomcat and Spring MVC)
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Lombok for reducing boilerplate code (e.g., getters, setters, constructors)
     compileOnly 'org.projectlombok:lombok'
+
+    // Spring Boot development tools for live reload and enhanced dev experience
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // Processor for Spring Boot's @ConfigurationProperties (optional, used for config metadata)
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    // Annotation processor for Lombok (needed to process Lombok annotations at compile time)
     annotationProcessor 'org.projectlombok:lombok'
+
+    // Spring Boot starter for testing (includes JUnit, Mockito, etc.)
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // JUnit platform launcher for running tests
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-//    implementation 'org.example:UberProject-EntityService:0.0.2-SNAPSHOT'
+
+    // External dependency (commented out) for an Uber Project Entity Service module
+    // implementation 'org.example:UberProject-EntityService:0.0.2-SNAPSHOT'
+
+    // Jedis client for interacting with Redis (alternative to Spring's default Lettuce client)
     implementation 'redis.clients:jedis:5.2.0'
-//    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // Spring Boot starter for JPA (commented out, used for database interaction with Hibernate)
+    // implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-eureka-client
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-client', version: '4.2.0'
 }
+
 
 tasks.named('test') {
     useJUnitPlatform()
